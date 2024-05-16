@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { ipcRenderer } from "./lib/ipcRenderer";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 function App() {
   const [status, setStatus] = useState<string>("");
@@ -16,44 +19,73 @@ function App() {
       });
   };
 
+  const toggleVanguard = async () => {
+    setError("");
+    ipcRenderer
+      .invoke("vanguard:toggle", { status })
+      .then((result) => {
+        if (!result) {
+          setError("Error toggling Vanguard");
+        }
+      })
+      .finally(async () => {
+        await getVanguardStatus();
+      });
+  };
+
   useEffect(() => {
     getVanguardStatus();
   }, []);
 
   return (
     <>
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignContent: "center",
+          alignItems: "center",
           flexWrap: "wrap",
           width: "100%",
           height: "100%",
+          gap: "1rem",
         }}
       >
-        {status === "running" && <img src="vanguard.png" width={64} />}
-        {status === "stopped" && <img src="vanguard-yellow.png" width={64} />}
-        <button
-          onClick={async () => {
-            ipcRenderer
-              .invoke("vanguard:toggle", { status })
-              .then((result) => {
-                if (!result) {
-                  setError("Error toggling Vanguard");
-                }
-              })
-              .finally(async () => {
-                await getVanguardStatus();
-              });
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "1rem",
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
           }}
         >
+          {status === "running" && (
+            <>
+              <img src="vanguard.png" width={64} />
+              <Typography>Vanguard is currently active</Typography>
+            </>
+          )}
+          {status === "stopped" && (
+            <>
+              <img src="vanguard-yellow.png" width={64} />
+              <Typography>Vanguard is currently disabled</Typography>
+            </>
+          )}
+        </Box>
+
+        <Button onClick={toggleVanguard}>
           {status === "running" ? "Stop" : "Start"}
-        </button>
-        <span>{error}</span>
-        <h3>{window.app?.version}</h3>
-      </div>
+        </Button>
+        <Typography variant="button" color="error">
+          {error}
+        </Typography>
+        <Typography variant="body2">
+          {window.app?.version ? `Version: ${window.app?.version}` : ""}
+        </Typography>
+      </Box>
     </>
   );
 }
