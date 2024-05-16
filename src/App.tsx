@@ -3,10 +3,12 @@ import { ipcRenderer } from "./lib/ipcRenderer";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function App() {
   const [status, setStatus] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const getVanguardStatus = async () => {
     ipcRenderer
@@ -16,6 +18,9 @@ function App() {
       })
       .catch((_error) => {
         setStatus("Error getting Vanguard status");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -35,7 +40,27 @@ function App() {
 
   useEffect(() => {
     getVanguardStatus();
+
+    return () => {
+      ipcRenderer.removeAllListeners("vanguard:get-status");
+    };
   }, []);
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
