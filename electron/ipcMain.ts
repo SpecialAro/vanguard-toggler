@@ -25,7 +25,7 @@ function initializeAppIPC(win: BrowserWindow) {
   ipcMain.on("initialized-renderer-process", () => {
     console.log("Renderer process initialized!");
   });
-  win.webContents.send("window:app", { version: app.getVersion() });
+  win.webContents.send("window:app-initialized", { version: app.getVersion() });
 }
 
 function vanguardIPC() {
