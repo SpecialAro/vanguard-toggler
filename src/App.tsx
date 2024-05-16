@@ -79,12 +79,16 @@ function App() {
         <Button onClick={toggleVanguard}>
           {status === "running" ? "Stop" : "Start"}
         </Button>
-        <Typography variant="button" color="error">
-          {error}
-        </Typography>
-        <Typography variant="body2">
-          {window.app?.version ? `Version: ${window.app?.version}` : ""}
-        </Typography>
+        {error && (
+          <Typography variant="button" color="error">
+            {error}
+          </Typography>
+        )}
+        {window.app?.version && (
+          <Typography variant="body2">
+            {window.app?.version ? `Version: ${window.app?.version}` : ""}
+          </Typography>
+        )}
       </Box>
     </>
   );

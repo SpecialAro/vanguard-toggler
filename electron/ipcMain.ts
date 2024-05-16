@@ -54,14 +54,14 @@ function vanguardIPC() {
     const { status } = data;
 
     const wantsRestart = await dialog.showMessageBox({
-      title: "Restart Required",
+      title: "Restart required",
       message:
         "You need to restart your computer for the changes to take effect",
-      type: "info",
-      buttons: ["Restart now", "Restart later"],
+      type: "warning",
+      buttons: ["Restart later", "Restart now"],
     });
 
-    const restart = wantsRestart.response === 0;
+    const restart = wantsRestart.response === 1;
 
     if (status === "running") {
       findProcess("name", "Riot Vanguard").then((list) => {
