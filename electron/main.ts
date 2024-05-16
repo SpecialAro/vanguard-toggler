@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, Menu } from "electron";
 // import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -35,11 +35,17 @@ function appReady() {
 
 function createWindow() {
   win = new BrowserWindow({
+    width: 600,
+    height: 300,
+    resizable: false,
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
     },
   });
+
+  // Set Menu
+  Menu.setApplicationMenu(null);
 
   // Test active push message to Renderer-process.
   win.webContents.on("did-finish-load", () => {
