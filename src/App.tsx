@@ -22,7 +22,19 @@ function App() {
 
   return (
     <>
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignContent: "center",
+          flexWrap: "wrap",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        {status === "running" && <img src="vanguard.png" width={64} />}
+        {status === "stopped" && <img src="vanguard-yellow.png" width={64} />}
         <button
           onClick={async () => {
             ipcRenderer
@@ -39,8 +51,6 @@ function App() {
         >
           {status === "running" ? "Stop" : "Start"}
         </button>
-
-        <span>{status}</span>
         <span>{error}</span>
         <h3>{window.app?.version}</h3>
       </div>
