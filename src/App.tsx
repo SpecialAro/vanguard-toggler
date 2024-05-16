@@ -42,6 +42,7 @@ function App() {
 
         <span>{status}</span>
         <span>{error}</span>
+        <h3>{window.app?.version}</h3>
       </div>
     </>
   );

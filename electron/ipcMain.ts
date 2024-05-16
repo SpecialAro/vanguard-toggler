@@ -10,13 +10,22 @@ const VGTRAY_OFF = join(VANGUARD_PATH, "vgtray_off.exe");
 const VGK_ON = join(VANGUARD_PATH, "vgk.sys");
 const VGK_OFF = join(VANGUARD_PATH, "vgk_off.sys");
 
-function initializeIPC(_win: BrowserWindow | null) {
+function initializeIPC(win: BrowserWindow) {
   ipcMain.on("renderer-process-message", (event, arg) => {
     console.log(arg);
     event.reply("main-process-reply", "Hello from main process!");
   });
 
+  initializeAppIPC(win);
+
   vanguardIPC();
+}
+
+function initializeAppIPC(win: BrowserWindow) {
+  ipcMain.on("initialized-renderer-process", () => {
+    console.log("Renderer process initialized!");
+  });
+  win.webContents.send("window:app", { version: app.getVersion() });
 }
 
 function vanguardIPC() {

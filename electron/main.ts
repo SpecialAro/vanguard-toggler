@@ -3,6 +3,7 @@ import { app, BrowserWindow, Menu } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { initializeIPC } from "./ipcMain";
+import { isDev } from "../src/lib/configs";
 
 // const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -27,7 +28,7 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, "public")
   : RENDERER_DIST;
 
-let win: BrowserWindow | null;
+let win: BrowserWindow;
 
 function appReady() {
   createWindow();
@@ -40,16 +41,24 @@ function createWindow() {
     resizable: false,
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
+      devTools: isDev,
       preload: path.join(__dirname, "preload.mjs"),
     },
   });
 
+  if (!win) return console.error("Window not created");
+
   // Set Menu
   Menu.setApplicationMenu(null);
+
+  if (isDev) {
+    win.webContents.openDevTools();
+  }
 
   // Test active push message to Renderer-process.
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", new Date().toLocaleString());
+    initializeIPC(win);
   });
 
   if (VITE_DEV_SERVER_URL) {
@@ -58,8 +67,6 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
-
-  initializeIPC(win);
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -68,7 +75,6 @@ function createWindow() {
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
-    win = null;
   }
 });
 
