@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { initializeIPC } from "./ipcMain";
 import { isDev } from "../src/lib/configs";
+import { initAutoUpdater } from "./lib/autoUpdater";
 
 // const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -46,6 +47,8 @@ function createWindow() {
       preload: path.join(__dirname, "preload.mjs"),
     },
   });
+
+  initAutoUpdater(win);
 
   // Set Menu
   Menu.setApplicationMenu(null);
