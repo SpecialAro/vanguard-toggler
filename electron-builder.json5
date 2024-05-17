@@ -1,23 +1,17 @@
 // @see - https://www.electron.build/configuration/configuration
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "VanguardToggler",
+  "appId": "com.vanguardtoggler",
   "asar": true,
   "productName": "Vanguard Toggler",
   "directories": {
     "buildResources":"buildResources",
-    "output": "release/${version}"
+    "output": "release"
   },
   "files": [
     "dist",
     "dist-electron"
   ],
-  // "mac": {
-  //   "target": [
-  //     "dmg"
-  //   ],
-  //   "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
-  // },
   "win": {
     "requestedExecutionLevel": "requireAdministrator",
     "target": [
@@ -32,14 +26,8 @@
   },
   "nsis": {
     "oneClick": false,
-    "perMachine": false,
+    "perMachine": true,
     "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
+    "deleteAppDataOnUninstall": true
   },
-  // "linux": {
-  //   "target": [
-  //     "AppImage"
-  //   ],
-  //   "artifactName": "${productName}-Linux-${version}.${ext}"
-  // }
 }
