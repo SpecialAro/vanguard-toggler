@@ -5,18 +5,19 @@
   "asar": true,
   "productName": "Vanguard Toggler",
   "directories": {
+    "buildResources":"buildResources",
     "output": "release/${version}"
   },
   "files": [
     "dist",
     "dist-electron"
   ],
-  "mac": {
-    "target": [
-      "dmg"
-    ],
-    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
-  },
+  // "mac": {
+  //   "target": [
+  //     "dmg"
+  //   ],
+  //   "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
+  // },
   "win": {
     "requestedExecutionLevel": "requireAdministrator",
     "target": [
@@ -35,10 +36,10 @@
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false
   },
-  "linux": {
-    "target": [
-      "AppImage"
-    ],
-    "artifactName": "${productName}-Linux-${version}.${ext}"
-  }
+  // "linux": {
+  //   "target": [
+  //     "AppImage"
+  //   ],
+  //   "artifactName": "${productName}-Linux-${version}.${ext}"
+  // }
 }
