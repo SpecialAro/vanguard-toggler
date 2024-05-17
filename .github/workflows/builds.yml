@@ -11,6 +11,9 @@
 
 name: Builds
 
+permissions:
+  contents: write
+
 on:
   # Push to any tracked branches
   push:
@@ -108,7 +111,7 @@ jobs:
       - name: "Build with publish for '${{ env.GIT_BRANCH_NAME }}' branch"
         if: ${{ env.GIT_BRANCH_NAME == 'nightly' || env.GIT_BRANCH_NAME == 'release' }}
         env:
-          GH_TOKEN: ${{ secrets.secrets.github_token }}
+          GH_TOKEN: ${{ secrets.github_token }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
         run: pnpm build --publish always
         shell: bash
