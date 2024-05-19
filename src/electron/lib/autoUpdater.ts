@@ -1,7 +1,8 @@
-import { type BrowserWindow, app, dialog } from "electron";
+import { app, dialog } from "electron";
 import { autoUpdater } from "electron-updater";
+import { electronStore } from "../../stores/electron.store";
 
-export function initAutoUpdater(win: BrowserWindow) {
+export function initAutoUpdater() {
   if (!app.isPackaged) {
     return;
   }
@@ -24,7 +25,7 @@ export function initAutoUpdater(win: BrowserWindow) {
       message: "A new version has been downloaded. Restart the application to apply the updates.",
     };
 
-    dialog.showMessageBox(win, dialogOpts).then((returnValue) => {
+    dialog.showMessageBox(electronStore.mainWindow!, dialogOpts).then((returnValue) => {
       if (returnValue.response === 1) autoUpdater.quitAndInstall();
     });
   });
