@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu } from "electron";
+import { BrowserWindow, Menu, app } from "electron";
 import { makeAutoObservable } from "mobx";
 import path from "node:path";
 import { initializeIPC } from "../electron/ipcMain";
@@ -15,10 +15,23 @@ class ElectronStore {
   mainWindow: BrowserWindow | null = null;
   constructor() {
     makeAutoObservable(this);
+    this.initialize();
   }
 
   initialize() {
-    this.createWindow();
+    app.on("window-all-closed", () => {
+      if (process.platform !== "darwin") {
+        app.quit();
+      }
+    });
+
+    app.on("activate", () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        this.createWindow();
+      }
+    });
+
+    app.whenReady().then(() => this.createWindow());
   }
 
   createWindow() {
