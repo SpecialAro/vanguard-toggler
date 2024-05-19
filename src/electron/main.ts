@@ -3,7 +3,7 @@ import { app, BrowserWindow, Menu } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { initializeIPC } from "./ipcMain";
-import { isDev } from "../src/lib/configs";
+import { isDev } from "../lib/configs";
 import { initAutoUpdater } from "./lib/autoUpdater";
 
 // const require = createRequire(import.meta.url);
@@ -41,7 +41,7 @@ function createWindow() {
     height: 300,
     resizable: false,
     fullscreenable: false,
-    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    icon: path.join(process.env.VITE_PUBLIC, "vanguard-toggler.png"),
     webPreferences: {
       devTools: isDev,
       preload: path.join(__dirname, "preload.mjs"),

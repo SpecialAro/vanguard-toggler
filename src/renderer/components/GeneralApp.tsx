@@ -2,8 +2,8 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useState, useEffect } from "react";
-import { ipcRenderer } from "../lib/ipcRenderer";
-import { stores } from "../lib/stores";
+import { ipcRenderer } from "../../lib/ipcRenderer";
+import { stores } from "../../lib/stores";
 
 function GeneralApp() {
   const { app } = stores;

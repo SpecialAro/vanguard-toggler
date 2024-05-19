@@ -1,6 +1,6 @@
 import GeneralApp from "./components/GeneralApp";
 import { observer } from "mobx-react-lite";
-import { stores } from "./lib/stores";
+import { stores } from "../lib/stores";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 
