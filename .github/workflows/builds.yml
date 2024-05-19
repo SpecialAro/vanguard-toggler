@@ -27,8 +27,8 @@ on:
       message:
         description: 'Message for build'
         required: true
-  schedule:
-    - cron: '0 0 * * *' # every night at 12 am
+  # schedule:
+  #   - cron: '0 0 * * *' # every night at 12 am
 
 env:
   USE_HARD_LINKS: false
