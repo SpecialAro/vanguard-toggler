@@ -1,30 +1,28 @@
-# React + TypeScript + Vite
+<div align="center">
+  <img width="100" height="100" src="./public/vanguar-toggler.png">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+  # Vanguard Toggler
 
-Currently, two official plugins are available:
+  A simple Toggler for the intrusive kernel Vanguard anti-cheat.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  :warning: **WARNING: This software is under heavy development.**
 
-## Expanding the ESLint configuration
+</div>
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+<!-- # Screenshots
 
-- Configure the top-level `parserOptions` property like this:
+![alt text](Isolated.png "Title") -->
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+# Installation and usage
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+1. Download the latest release here
+2. Install it.
+3. Run the program with Administrator permissions (asked by default - needed for making changes to the `C:\Program Files\Riot Vanguard` folder
+4. Click on the Start/Stop button to start and stop the Vanguard kernel - you will be prompt to restart the computer, which is needed to apply changes to the kernel itself.
+5. Reboot!
+6. Check that Vanguard tray app isn't active (if clicked to stop in step 4).
+
+**Note: Make sure to not change the startup behaviour for Vanguard Tray app (vgtray.exe) - it should be enable to launch as the computer startups, which is the default behaviour. This way Vanguard Toggler will toggle Vanguard on/off on each reboot automatically.**
+
+<!-- # License
+This project was developed under license XXX. You can check more information here. -->
