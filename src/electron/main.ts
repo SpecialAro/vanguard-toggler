@@ -1,34 +1,8 @@
 import { app, BrowserWindow, Menu } from "electron";
-// import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { initializeIPC } from "./ipcMain";
-import { isDev } from "../lib/configs";
+import { ELECTRON_DIST_PATH, isDev, RENDERER_DIST, VITE_DEV_SERVER_URL, VITE_PUBLIC } from "../lib/configs";
 import { initAutoUpdater } from "./lib/autoUpdater";
-
-// const require = createRequire(import.meta.url);
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// The built directory structure
-//
-// ├─┬─┬ dist
-// │ │ └── index.html
-// │ │
-// │ ├─┬ dist-electron
-// │ │ ├── main.js
-// │ │ └── preload.mjs
-// │
-process.env.APP_ROOT = path.join(__dirname, "..");
-
-// 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
-export const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
-export const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
-export const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
-
-process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
-  ? path.join(process.env.APP_ROOT, "public")
-  : RENDERER_DIST;
-
 let win: BrowserWindow | null = null;
 
 function appReady() {
@@ -41,10 +15,10 @@ function createWindow() {
     height: 300,
     resizable: false,
     fullscreenable: false,
-    icon: path.join(process.env.VITE_PUBLIC, "vanguard-toggler.png"),
+    icon: path.join(VITE_PUBLIC, "vanguard-toggler.png"),
     webPreferences: {
       devTools: isDev,
-      preload: path.join(__dirname, "preload.mjs"),
+      preload: path.join(ELECTRON_DIST_PATH, "preload.mjs"),
     },
   });
 
