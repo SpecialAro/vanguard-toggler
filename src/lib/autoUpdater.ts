@@ -1,6 +1,6 @@
 import { app, dialog } from "electron";
 import { autoUpdater } from "electron-updater";
-import { electronStore } from "../../stores/electron.store";
+import { electronStore } from "../stores/electron.store";
 
 export function initAutoUpdater() {
   if (!app.isPackaged) {

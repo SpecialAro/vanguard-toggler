@@ -2,7 +2,7 @@ import { BrowserWindow, Menu, app } from "electron";
 import { makeAutoObservable } from "mobx";
 import path from "node:path";
 import { initializeIPC } from "../electron/ipcMain";
-import { initAutoUpdater } from "../electron/lib/autoUpdater";
+import { initAutoUpdater } from "../lib/autoUpdater";
 import {
   VITE_PUBLIC,
   isDev,
