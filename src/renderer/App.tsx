@@ -1,8 +1,6 @@
 import GeneralApp from "./components/GeneralApp";
 import { observer } from "mobx-react-lite";
-import { stores } from "../lib/stores";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -11,23 +9,6 @@ import IconButton from "@mui/material/IconButton";
 import MinimizeIcon from "@mui/icons-material/Minimize";
 
 function App() {
-  const { app } = stores;
-
-  if (app.loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-          height: "100%",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
   return (
     <Box
       sx={{
@@ -53,7 +34,7 @@ const Topbar = () => {
   return (
     <AppBar
       position="static"
-      sx={{ height: barHeight, backgroundColor: "grey" }}
+      sx={{ height: barHeight, backgroundColor: "#153B47" }}
     >
       <Toolbar style={{ padding: 0, minHeight: barHeight, height: barHeight }}>
         <Box
@@ -89,7 +70,9 @@ const Topbar = () => {
               flexGrow: 1,
             }}
           >
-            <Typography sx={{ fontSize: "0.8rem" }}>Vanguard Toggler</Typography>
+            <Typography sx={{ fontSize: "0.8rem" }}>
+              Vanguard Toggler
+            </Typography>
             {appVersion && (
               <Typography sx={{ fontSize: "0.6rem" }}>v{appVersion}</Typography>
             )}

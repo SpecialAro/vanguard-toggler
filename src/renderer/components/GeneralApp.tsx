@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import { useState, useEffect } from "react";
 import { ipcRenderer } from "../../lib/ipcRenderer";
 import { stores } from "../../lib/stores";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function GeneralApp() {
   const { app } = stores;
@@ -46,57 +47,74 @@ function GeneralApp() {
     };
   }, []);
 
+  if (app.loading) {
+    return (
+      <Wrapper>
+        <CircularProgress />
+      </Wrapper>
+    );
+  }
+
   return (
-    <>
+    <Wrapper>
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
+          gap: "1rem",
           justifyContent: "center",
           alignContent: "center",
           alignItems: "center",
-          flexWrap: "wrap",
-          width: "100%",
-          height: "100%",
-          gap: "1rem",
-          flexGrow: 1,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "1rem",
-            justifyContent: "center",
-            alignContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {status === "running" && (
-            <>
-              <img src="vanguard.png" width={64} />
-              <Typography>Vanguard is currently active</Typography>
-            </>
-          )}
-          {status === "stopped" && (
-            <>
-              <img src="vanguard-yellow.png" width={64} />
-              <Typography>Vanguard is currently disabled</Typography>
-            </>
-          )}
-        </Box>
-
-        <Button onClick={toggleVanguard}>
-          {status === "running" ? "Stop" : "Start"}
-        </Button>
-        {error && (
-          <Typography variant="button" color="error">
-            {error}
-          </Typography>
+        {status === "running" && (
+          <>
+            <img src="vanguard.png" width={64} />
+            <Typography color="white">Vanguard is currently active</Typography>
+          </>
+        )}
+        {status === "stopped" && (
+          <>
+            <img src="vanguard-yellow.png" width={64} />
+            <Typography color="white">
+              Vanguard is currently disabled
+            </Typography>
+          </>
         )}
       </Box>
-    </>
+
+      <Button onClick={toggleVanguard}>
+        {status === "running" ? "Stop" : "Start"}
+      </Button>
+      {error && (
+        <Typography variant="button" color="error">
+          {error}
+        </Typography>
+      )}
+    </Wrapper>
   );
 }
 
 export default GeneralApp;
+
+const Wrapper = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignContent: "center",
+        alignItems: "center",
+        flexWrap: "wrap",
+        width: "100%",
+        height: "100%",
+        gap: "1rem",
+        flexGrow: 1,
+        backgroundColor: "#153B47",
+      }}
+    >
+      {children}
+    </Box>
+  );
+};
