@@ -11,7 +11,7 @@ function GeneralApp() {
   const { app } = stores;
   const [status, setStatus] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const getVanguardStatus = async () => {
     ipcRenderer
