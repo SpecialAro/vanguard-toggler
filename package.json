@@ -2,7 +2,7 @@
   "name": "vanguard-toggler",
   "description": "Vanguard Toggler | A simple app to toggle Vanguard's kernel AC on and off.",
   "private": true,
-  "version": "0.0.1-nightly.0",
+  "version": "0.0.2-nightly.0",
   "type": "module",
   "author": {
     "name": "André Oliveira",
