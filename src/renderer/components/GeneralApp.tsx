@@ -59,6 +59,7 @@ function GeneralApp() {
           width: "100%",
           height: "100%",
           gap: "1rem",
+          flexGrow: 1,
         }}
       >
         <Box
@@ -91,11 +92,6 @@ function GeneralApp() {
         {error && (
           <Typography variant="button" color="error">
             {error}
-          </Typography>
-        )}
-        {app.version && (
-          <Typography variant="body2">
-            {app.version ? `Version: ${app.version}` : ""}
           </Typography>
         )}
       </Box>

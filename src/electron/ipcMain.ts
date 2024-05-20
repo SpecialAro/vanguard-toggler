@@ -27,6 +27,14 @@ function initializeAppIPC() {
     console.log("Renderer process initialized!");
   });
   electronStore.mainWindow?.webContents.send("window:app-initialized", { version: app.getVersion() });
+
+  ipcMain.on("app:close", () => {
+    app.quit();
+  });
+
+  ipcMain.on("app:minimize", () => {
+    electronStore.mainWindow?.minimize();
+  });
 }
 
 function vanguardIPC() {

@@ -40,6 +40,8 @@ class ElectronStore {
       height: 300,
       resizable: false,
       fullscreenable: false,
+      frame: false,
+      autoHideMenuBar: false,
       icon: path.join(VITE_PUBLIC, "vanguard-toggler.png"),
       webPreferences: {
         devTools: isDev,

@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="100" height="100" src="./public/vanguar-toggler.png">
+  <img width="100" height="100" src="./public/vanguard-toggler.png">
 
   # Vanguard Toggler
 
