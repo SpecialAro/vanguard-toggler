@@ -68,7 +68,7 @@ const Topbar = () => {
         >
           <Box
             sx={{
-              padding: 0.7  ,
+              padding: 0.7,
               marginRight: 1.5,
               backgroundColor: "white",
               display: "flex",
@@ -84,14 +84,14 @@ const Topbar = () => {
               display: "flex",
               flexDirection: "row",
               width: "100%",
-              alignItems: "center",
+              alignItems: "baseline",
               gap: 1.2,
               flexGrow: 1,
             }}
           >
-            <Typography variant="body1">Vanguard Toggler</Typography>
+            <Typography sx={{ fontSize: "0.8rem" }}>Vanguard Toggler</Typography>
             {appVersion && (
-              <Typography variant="body2">v{appVersion}</Typography>
+              <Typography sx={{ fontSize: "0.6rem" }}>v{appVersion}</Typography>
             )}
           </Box>
         </Box>
