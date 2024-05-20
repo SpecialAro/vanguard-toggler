@@ -5,11 +5,13 @@ import { useState, useEffect } from "react";
 import { ipcRenderer } from "../../lib/ipcRenderer";
 import { stores } from "../../lib/stores";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useTheme } from "@mui/material";
 
 function GeneralApp() {
   const { app } = stores;
   const [status, setStatus] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const theme = useTheme();
 
   const getVanguardStatus = async () => {
     ipcRenderer
@@ -70,13 +72,15 @@ function GeneralApp() {
         {status === "running" && (
           <>
             <img src="vanguard.png" width={64} />
-            <Typography color="white">Vanguard is currently active</Typography>
+            <Typography>
+              Vanguard is currently active
+            </Typography>
           </>
         )}
         {status === "stopped" && (
           <>
             <img src="vanguard-yellow.png" width={64} />
-            <Typography color="white">
+            <Typography>
               Vanguard is currently disabled
             </Typography>
           </>
@@ -98,6 +102,7 @@ function GeneralApp() {
 export default GeneralApp;
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -111,7 +116,8 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
         height: "100%",
         gap: "1rem",
         flexGrow: 1,
-        backgroundColor: "#153B47",
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary
       }}
     >
       {children}

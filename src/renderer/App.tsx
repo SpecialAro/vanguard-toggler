@@ -7,20 +7,24 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import MinimizeIcon from "@mui/icons-material/Minimize";
+import { ThemeProvider, useTheme } from "@mui/material";
+import { theme } from "./theme/theme";
 
 function App() {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <Topbar />
-      <GeneralApp />
-    </Box>
+    <ThemeProvider theme={theme}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <Topbar />
+        <GeneralApp />
+      </Box>
+    </ThemeProvider>
   );
 }
 
@@ -31,12 +35,10 @@ export default ObservedApp;
 const Topbar = () => {
   const barHeight = 42;
   const appVersion = window.app?.version || "";
+  const theme = useTheme();
   return (
-    <AppBar
-      position="static"
-      sx={{ height: barHeight, backgroundColor: "#153B47" }}
-    >
-      <Toolbar style={{ padding: 0, minHeight: barHeight, height: barHeight }}>
+    <AppBar position="static" sx={{ height: barHeight }}>
+      <Toolbar style={{ padding: 0, minHeight: barHeight, height: barHeight, backgroundColor: theme.palette.background.default }}>
         <Box
           className="window-draggable"
           sx={{
