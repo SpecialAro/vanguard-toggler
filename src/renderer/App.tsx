@@ -66,7 +66,18 @@ const Topbar = () => {
             alignItems: "center",
           }}
         >
-          <img src="vanguard-toggler.png" width={20} style={{ margin: 10 }} />
+          <Box
+            sx={{
+              padding: 0.7  ,
+              marginRight: 1.5,
+              backgroundColor: "white",
+              display: "flex",
+              justifyContent: "center",
+              borderRadius: 10,
+            }}
+          >
+            <img src="vanguard-toggler.png" width={15} />
+          </Box>
 
           <Box
             sx={{
@@ -90,7 +101,7 @@ const Topbar = () => {
           onClick={() => {
             window.ipcRenderer.send("app:minimize");
           }}
-          style={{ borderRadius: 0 }}
+          sx={{ borderRadius: 0 }}
         >
           <MinimizeIcon />
         </IconButton>
@@ -99,7 +110,7 @@ const Topbar = () => {
           onClick={() => {
             window.ipcRenderer.send("app:close");
           }}
-          style={{ borderRadius: 0 }}
+          sx={{ borderRadius: 0, "&:hover": { backgroundColor: "red" } }}
         >
           <CloseIcon />
         </IconButton>
