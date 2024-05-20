@@ -1,6 +1,6 @@
 import { ThemeOptions, createTheme } from "@mui/material/styles";
 
-const themeOptions: ThemeOptions = {
+const darkThemeOptions: ThemeOptions = {
   palette: {
     mode: "dark",
     text: {
@@ -20,4 +20,5 @@ const themeOptions: ThemeOptions = {
   },
 };
 
-export const theme = createTheme(themeOptions);
+export const darkTheme = createTheme(darkThemeOptions);
+export const lightTheme = createTheme();

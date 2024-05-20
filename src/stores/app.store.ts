@@ -5,6 +5,12 @@ export class AppStore {
 
   version: string | null = null;
 
+  theme: "dark" | "light" = "dark";
+
+  get isDarkTheme() {
+    return this.theme === "dark";
+  }
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -15,5 +21,9 @@ export class AppStore {
 
   setLoading(loading: boolean) {
     this.loading = loading;
+  }
+
+  setTheme(theme: "dark" | "light") {
+    this.theme = theme;
   }
 }

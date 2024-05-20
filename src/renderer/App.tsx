@@ -8,11 +8,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import MinimizeIcon from "@mui/icons-material/Minimize";
 import { ThemeProvider, useTheme } from "@mui/material";
-import { theme } from "./theme/theme";
+import { darkTheme, lightTheme } from "./theme/theme";
+import { stores } from "../lib/stores";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 function App() {
+  const { app } = stores;
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={app.isDarkTheme ? darkTheme : lightTheme}>
       <Box
         sx={{
           display: "flex",
@@ -36,9 +40,18 @@ const Topbar = () => {
   const barHeight = 42;
   const appVersion = window.app?.version || "";
   const theme = useTheme();
+  const { app } = stores;
   return (
     <AppBar position="static" sx={{ height: barHeight }}>
-      <Toolbar style={{ padding: 0, minHeight: barHeight, height: barHeight, backgroundColor: theme.palette.background.default }}>
+      <Toolbar
+        style={{
+          padding: 0,
+          minHeight: barHeight,
+          height: barHeight,
+          backgroundColor: theme.palette.background.default,
+          color: theme.palette.text.primary,
+        }}
+      >
         <Box
           className="window-draggable"
           sx={{
@@ -53,7 +66,9 @@ const Topbar = () => {
             sx={{
               padding: 0.7,
               marginRight: 1.5,
-              backgroundColor: "white",
+              backgroundColor: theme.palette.getContrastText(
+                theme.palette.background.default
+              ),
               display: "flex",
               justifyContent: "center",
               borderRadius: 10,
@@ -80,6 +95,19 @@ const Topbar = () => {
             )}
           </Box>
         </Box>
+        <IconButton
+          onClick={() => {
+            app.setTheme(stores.app.isDarkTheme ? "light" : "dark");
+          }}
+          size="small"
+          sx={{ marginRight: 1, opacity: 0.2, "&:hover": { opacity: 1 } }}
+        >
+          {app.isDarkTheme ? (
+            <LightModeIcon sx={{ fontSize: "1rem" }} />
+          ) : (
+            <DarkModeIcon sx={{ fontSize: "1rem" }} />
+          )}
+        </IconButton>
 
         <IconButton
           color="inherit"
@@ -95,7 +123,7 @@ const Topbar = () => {
           onClick={() => {
             window.ipcRenderer.send("app:close");
           }}
-          sx={{ borderRadius: 0, "&:hover": { backgroundColor: "red" } }}
+          sx={{ borderRadius: 0, "&:hover": { backgroundColor: "red", color: 'white' } }}
         >
           <CloseIcon />
         </IconButton>
