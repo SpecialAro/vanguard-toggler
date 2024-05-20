@@ -1,8 +1,9 @@
-import { BrowserWindow, app, dialog, ipcMain } from "electron";
+import { app, dialog, ipcMain } from "electron";
 import fs from "fs-extra";
 import { join } from "node:path";
 import * as shutdown from "electron-shutdown-command";
 import findProcess from "find-process";
+import { electronStore } from "../stores/electron.store";
 
 const VANGUARD_PATH = "C:\\Program Files\\Riot Vanguard";
 const VGTRAY_ON = join(VANGUARD_PATH, "vgtray.exe");
@@ -10,13 +11,30 @@ const VGTRAY_OFF = join(VANGUARD_PATH, "vgtray_off.exe");
 const VGK_ON = join(VANGUARD_PATH, "vgk.sys");
 const VGK_OFF = join(VANGUARD_PATH, "vgk_off.sys");
 
-function initializeIPC(_win: BrowserWindow | null) {
+function initializeIPC() {
   ipcMain.on("renderer-process-message", (event, arg) => {
     console.log(arg);
     event.reply("main-process-reply", "Hello from main process!");
   });
 
+  initializeAppIPC();
+
   vanguardIPC();
+}
+
+function initializeAppIPC() {
+  ipcMain.on("initialized-renderer-process", () => {
+    console.log("Renderer process initialized!");
+  });
+  electronStore.mainWindow?.webContents.send("window:app-initialized", { version: app.getVersion() });
+
+  ipcMain.on("app:close", () => {
+    app.quit();
+  });
+
+  ipcMain.on("app:minimize", () => {
+    electronStore.mainWindow?.minimize();
+  });
 }
 
 function vanguardIPC() {
@@ -45,14 +63,14 @@ function vanguardIPC() {
     const { status } = data;
 
     const wantsRestart = await dialog.showMessageBox({
-      title: "Restart Required",
+      title: "Restart required",
       message:
         "You need to restart your computer for the changes to take effect",
-      type: "info",
-      buttons: ["Restart now", "Restart later"],
+      type: "warning",
+      buttons: ["Restart later", "Restart now"],
     });
 
-    const restart = wantsRestart.response === 0;
+    const restart = wantsRestart.response === 1;
 
     if (status === "running") {
       findProcess("name", "Riot Vanguard").then((list) => {

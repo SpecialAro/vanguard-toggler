@@ -1,0 +1,117 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+# Note: This workflow requires some secrets setup, and set on this repo with the names:
+# 'APPLEID' (The username of your Apple developer account - for notarizing the mac artifacts)
+# 'APPLEID_PASSWORD' (An app-specific password - for notarizing the mac artifacts)
+# 'CSC_LINK' (The HTTPS link or local path to certificate - for code signing of mac artifacts)
+# 'CSC_KEY_PASSWORD' (The password to decrypt the certificate given in CSC_LINK - for code signing of mac artifacts)
+# 'WIN_CSC_LINK' (The HTTPS link or local path to certificate - for code signing of windows artifacts)
+# 'WIN_CSC_KEY_PASSWORD' (The password to decrypt the certificate given in CSC_LINK - for code signing of windows artifacts)
+
+name: Builds
+
+permissions:
+  contents: write
+
+on:
+  # Push to any tracked branches
+  push:
+    branches: [develop, release, nightly]
+  # PRs only on develop branch
+  pull_request:
+    branches: [develop]
+  # Manual trigger from the UI
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Message for build'
+        required: true
+  # schedule:
+  #   - cron: '0 0 * * *' # every night at 12 am
+
+env:
+  USE_HARD_LINKS: false
+  # DEBUG: electron-builder
+
+jobs:
+  build_windows:
+    name: 'Windows ${{ github.event.inputs.message }}'
+    if: ${{ (github.event_name != 'workflow_dispatch' || (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.message, '[Windows]')))) }}
+    runs-on: windows-2022
+    steps:
+      - name: Set env vars
+        run: |
+          echo "HOME=$USERPROFILE" >> $GITHUB_ENV
+          echo "NPM_CACHE=$USERPROFILE/.npm" >> $GITHUB_ENV
+          echo "ELECTRON_CACHE=$USERPROFILE/.cache/electron" >> $GITHUB_ENV
+          echo "ELECTRON_BUILDER_CACHE=$USERPROFILE/.cache/electron-builder" >> $GITHUB_ENV
+          echo "MANUAL_REBUILD_ON_NIGHTLY=${{ github.event_name == 'workflow_dispatch' && contains(github.event.inputs.message, '[nightly branch]') }}" >> $GITHUB_ENV
+        shell: bash
+      - name: Checkout code along with submodules for the 'nightly' branch if the trigger event is 'scheduled' or this is a forced rebuild on the nightly branch
+        uses: actions/checkout@v4
+        if: ${{ github.event_name == 'schedule' || env.MANUAL_REBUILD_ON_NIGHTLY == 'true' }}
+        with:
+          submodules: recursive
+          fetch-depth: 0 # Note: Needed to be able to pull the 'develop' branch as well for merging
+          ref: nightly
+      - name: Checkout code along with submodules for any branch if the trigger event is NOT 'scheduled' and this is NOT a forced rebuild on the nightly branch
+        uses: actions/checkout@v4
+        if: ${{ github.event_name != 'schedule' && env.MANUAL_REBUILD_ON_NIGHTLY != 'true' }}
+        with:
+          submodules: recursive
+          fetch-depth: 0 # Note: Needed to be able to pull the 'develop' branch as well for merging
+      - name: Extract Git branch name from the currently checked out branch (not from the branch where this run was kicked off)
+        run: echo "GIT_BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+        shell: bash
+      - name: Cache electron modules
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-electron-modules
+        with:
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./pnpm-lock.yaml') }}
+          path: ${{ env.ELECTRON_CACHE }}
+      - name: Cache electron-builder modules
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-electron-builder-modules
+        with:
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('./pnpm-lock.yaml') }}
+          path: ${{ env.ELECTRON_BUILDER_CACHE }}
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+      - name: Use Node.js specified in the '.nvmrc' file
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+      #TODO - Remove this once https://github.com/electron-userland/electron-builder/issues/6933#issuecomment-1213438889 is resolved
+      - name: Tweak pnpm.cjs
+        run: |
+          # Run the command to get the pnpm store path and store it in a variable
+          PNPM_BASEDIR=$(dirname "$(echo "$PNPM_HOME" | sed -e 's/\\/\//g' -e 's/^\([A-Za-z]\):/\/\1/')")
+
+          sed -i 's/\/usr\/bin\/env node/node/g' "$PNPM_BASEDIR/pnpm/bin/pnpm.cjs"
+        shell: bash
+      - name: Install node dependencies
+        uses: nick-fields/retry@v3
+        with:
+          command: pnpm i
+          timeout_minutes: 15
+          max_attempts: 3
+          retry_on: error
+      # - name: Run linter and tests
+      #   run: pnpm lint && pnpm test
+      #   shell: bash
+      - name: Build without publish for any branch not 'nightly' and not 'release'
+        if: ${{ env.GIT_BRANCH_NAME != 'nightly' && env.GIT_BRANCH_NAME != 'release' }}
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+        run: pnpm build --publish never
+        shell: bash
+      - name: "Build with publish for '${{ env.GIT_BRANCH_NAME }}' branch"
+        if: ${{ env.GIT_BRANCH_NAME == 'nightly' || env.GIT_BRANCH_NAME == 'release' }}
+        env:
+          GH_TOKEN: ${{ secrets.github_token }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+        run: pnpm build --publish always
+        shell: bash
