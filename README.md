@@ -17,7 +17,7 @@
 
 1. Download the latest release here
 2. Install it.
-3. Run the program with Administrator permissions (asked by default - needed for making changes to the `C:\Program Files\Riot Vanguard` folder
+3. Run the program with Administrator permissions (asked by default - needed for making changes to the `C:\Program Files\Riot Vanguard` folder)
 4. Click on the Start/Stop button to start and stop the Vanguard kernel - you will be prompt to restart the computer, which is needed to apply changes to the kernel itself.
 5. Reboot!
 6. Check that Vanguard tray app isn't active (if clicked to stop in step 4).
